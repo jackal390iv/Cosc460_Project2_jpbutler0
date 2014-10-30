@@ -24,9 +24,9 @@ public class main {
 
         if (optionPanel == 0) {
             dns.Server.serverHub server = new dns.Server.serverHub();
+            //server.start();
         } else if (optionPanel == 1) {
             dns.Client.connectionHelper connection = new dns.Client.connectionHelper();
-            connection.start();
         }
     }
 
