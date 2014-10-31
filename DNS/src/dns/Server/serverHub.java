@@ -61,6 +61,14 @@ public class serverHub extends javax.swing.JFrame {
         jLabel5.setText(Integer.valueOf(portAddress).toString());
 
         jButton1.setText("Exit Program");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jButton1MousePressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -120,9 +128,17 @@ public class serverHub extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        System.exit(0);
+    }//GEN-LAST:event_jButton1MouseClicked
+
+    private void jButton1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MousePressed
+        System.exit(0);
+    }//GEN-LAST:event_jButton1MousePressed
+
     private void build() {
         try {
-            server = new ServerSocket(6052);
+            server = new ServerSocket(0);
             ipAddress = InetAddress.getLocalHost().getHostAddress();
             portAddress = server.getLocalPort();
         } catch (IOException ex) {

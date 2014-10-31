@@ -11,6 +11,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -28,17 +30,22 @@ public class worker implements Runnable {
     }
 
     public void run() {
-        try {
-            receiveData = new DataInputStream(new BufferedInputStream(client.getInputStream()));
-            String temp = receiveData.readUTF();
-            sendData = new DataOutputStream(client.getOutputStream());
-            InetAddress address = InetAddress.getByName(temp);
-            sendData.writeUTF(temp + ": " + address.getHostAddress());
-            sendData.flush();
-
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "Cause: " + ex.getCause() + "\n" + "Message: " + ex.getMessage() + "\n" + "Local Message: " + ex.getLocalizedMessage(), "Error", 0);
-            System.exit(0);
-        }
+        do {
+            try {
+                receiveData = new DataInputStream(new BufferedInputStream(client.getInputStream()));
+                String temp = receiveData.readUTF();
+                sendData = new DataOutputStream(client.getOutputStream());
+                try {
+                    InetAddress address = InetAddress.getByName(temp);
+                    sendData.writeUTF(temp + ": " + address.getHostAddress());
+                    sendData.flush();
+                } catch (IOException ex) {
+                    sendData.writeUTF("ERROR: could not resolve host, please try again.");
+                    sendData.flush();
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(worker.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } while (client.isConnected());
     }
 }

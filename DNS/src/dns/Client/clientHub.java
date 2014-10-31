@@ -72,12 +72,13 @@ public class clientHub extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextField1.setText("www.frostburg.edu");
-
         jButton1.setText("Search By Name");
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton1MouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jButton1MousePressed(evt);
             }
         });
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -91,6 +92,9 @@ public class clientHub extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton2MouseClicked(evt);
             }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jButton2MousePressed(evt);
+            }
         });
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -100,7 +104,7 @@ public class clientHub extends javax.swing.JFrame {
 
         jLabel1.setText("An example would be \"www.frostburg.edu\"");
 
-        jLabel2.setText("Input a file location here; for example \"C//..../Documents/data.txt\"");
+        jLabel2.setText("Input a file location here; for example \"C\\....\\Documents\\data.txt\"");
 
         jLabel3.setText("This file may only contain one address per line");
 
@@ -116,9 +120,12 @@ public class clientHub extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton3MouseClicked(evt);
             }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jButton3MousePressed(evt);
+            }
         });
 
-        jLabel5.setText("Input an output file location here; for example \"C//.../Documents/output.txt\"");
+        jLabel5.setText("Input an output file location here; for example \"C\\...\\Documents\\output.txt\"");
 
         jLabel6.setText("WARNING: This output file will be overwritten if it already exists");
 
@@ -126,14 +133,13 @@ public class clientHub extends javax.swing.JFrame {
 
         jLabel10.setText("Server Port-Address:");
 
-        jTextField4.setText("6052");
-
-        jTextField5.setText("131.118.70.208");
-
         jButton4.setText("Connect To Server ");
         jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton4MouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jButton4MousePressed(evt);
             }
         });
 
@@ -329,6 +335,62 @@ public class clientHub extends javax.swing.JFrame {
             Logger.getLogger(clientHub.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton3MouseClicked
+
+    private void jButton4MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MousePressed
+        int exit = 0;
+        ipAddress = jTextField5.getText();
+        portAddress = Integer.parseInt(jTextField4.getText());
+        try {
+            socket = new Socket(ipAddress, portAddress);
+        } catch (IOException ex) {
+            String[] jButtons = {"Try Again", "Exit"};
+            exit = JOptionPane.showOptionDialog(null, "Cause: " + ex.getCause() + "\n" + "Message: " + ex.getMessage() + "\n" + "Local Message: " + ex.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE, 0, null, jButtons, jButtons[1]);
+            if (exit == 1) {
+                System.exit(0);
+            }
+        }
+        if (socket.isConnected() == true) {
+            jLabel11.setText("Successfully Connected To Server!!");
+        }
+    }//GEN-LAST:event_jButton4MousePressed
+
+    private void jButton1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MousePressed
+        jTextArea1.setText(null);
+        oneAtATime(jTextField1.getText());
+    }//GEN-LAST:event_jButton1MousePressed
+
+    private void jButton2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MousePressed
+        jTextArea1.setText(null);
+        File copyFile = new File(jTextField2.getText());
+        if (!(copyFile.exists())) {
+            jTextArea1.append("I'm sorry, but your file pathing was incorect; please try again.");
+        } else {
+            try {
+                Scanner scan = new Scanner(copyFile);
+                while (scan.hasNextLine()) {
+                    String temp = scan.nextLine();
+                    if (!(temp.isEmpty())) {
+                        oneAtATime(temp);
+                    }
+                }
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(clientHub.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jButton2MousePressed
+
+    private void jButton3MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MousePressed
+        File goingToFile = new File(jTextField3.getText());
+        FileWriter file_Location;
+        try {
+            file_Location = new FileWriter(goingToFile.getAbsoluteFile());
+            BufferedWriter writer = new BufferedWriter(file_Location);
+            jTextArea1.write(writer);
+            writer.close();
+        } catch (IOException ex) {
+            Logger.getLogger(clientHub.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton3MousePressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
