@@ -5,6 +5,7 @@
  */
 package dns.Server;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import javax.swing.JOptionPane;
@@ -127,7 +128,7 @@ public class serverHub extends javax.swing.JFrame {
 
             //InetAddress address = InetAddress.getByName("www.frostburg.edu");
             //System.out.println(address.getHostAddress());
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Cause: " + ex.getCause() + "\n" + "Message: " + ex.getMessage() + "\n" + "Local Message: " + ex.getLocalizedMessage(), "Error", 0);
             System.exit(0);
         }
@@ -136,9 +137,7 @@ public class serverHub extends javax.swing.JFrame {
         jLabel3.setText(ipAddress);
         jLabel5.setText(Integer.valueOf(portAddress).toString());
 
-        //new recieveData().start();
-        //new sendData().start();
-        //JOptionPane.showMessageDialog(null, "IP-Address: " + ipAdress + "\n" + "Port-Address: " + portAdress, "Server Hub", 1);
+        new nameServer(socket);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

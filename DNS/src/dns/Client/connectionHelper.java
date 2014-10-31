@@ -5,8 +5,12 @@
  */
 package dns.Client;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -130,23 +134,19 @@ public class connectionHelper extends javax.swing.JFrame {
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         boolean connection = false;
         int exit = 0;
+        ipAddress = jTextField1.getText();
+        portAddress = Integer.parseInt(jTextField2.getText());
         try {
-
-            ipAddress = jTextField1.getText();
-            portAddress = Integer.parseInt(jTextField2.getText());
-
             socket = new Socket(ipAddress, portAddress);
-
-            if (socket.isConnected() == true) {
-                connection = true;
-            }
-
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             String[] jButtons = {"Try Again", "Exit"};
             exit = JOptionPane.showOptionDialog(null, "Cause: " + ex.getCause() + "\n" + "Message: " + ex.getMessage() + "\n" + "Local Message: " + ex.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE, 0, null, jButtons, jButtons[1]);
             if (exit == 1) {
                 System.exit(0);
             }
+        }
+        if (socket.isConnected() == true) {
+            connection = true;
         }
 
         if (connection == true) {
