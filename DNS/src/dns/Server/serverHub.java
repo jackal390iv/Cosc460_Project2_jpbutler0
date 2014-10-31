@@ -8,6 +8,8 @@ package dns.Server;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import javax.swing.JOptionPane;
 
 /**
@@ -130,6 +132,7 @@ public class serverHub extends javax.swing.JFrame {
         //System.out.println("ip: " + ipAddress + "\n" + "port: " + portAddress);
         jLabel3.setText(ipAddress);
         jLabel5.setText(Integer.valueOf(portAddress).toString());
+
         new nameServer(server);
     }
 

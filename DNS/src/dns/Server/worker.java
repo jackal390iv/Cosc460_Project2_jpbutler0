@@ -17,12 +17,17 @@ import javax.swing.JOptionPane;
  *
  * @author alfred
  */
-public class worker {
+public class worker implements Runnable {
 
     private DataOutputStream sendData = null;
     private DataInputStream receiveData = null;
+    private Socket client = null;
 
     public worker(Socket client) {
+        this.client = client;
+    }
+
+    public void run() {
         try {
             receiveData = new DataInputStream(new BufferedInputStream(client.getInputStream()));
             String temp = receiveData.readUTF();

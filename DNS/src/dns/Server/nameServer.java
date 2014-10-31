@@ -17,20 +17,21 @@ import java.util.logging.Logger;
  *
  * @author alfred
  */
-public class nameServer{
+public class nameServer {
 
+    private ServerSocket server;
     private Socket client = null;
 
-    public nameServer(ServerSocket socket) {
+    public nameServer(ServerSocket server) {
         ExecutorService executor = Executors.newCachedThreadPool();
         do {
             try {
-                client = socket.accept();
+                client = server.accept();
             } catch (IOException ex) {
                 Logger.getLogger(worker.class.getName()).log(Level.SEVERE, null, ex);
             }
-            worker worker = new worker(client);
-            executor.execute((Runnable) worker);
+            Runnable work = new worker(client);
+            executor.execute(work);
         } while (true);
     }
 }
