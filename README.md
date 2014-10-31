@@ -1,4 +1,3 @@
 Cosc460_Project2_jpbutler0
 ==========================
-
-DNS Server
+This program creates a DNS server; to elaorate this program takes a host name and returns its ip-address. when you start the program you have to option of running the server or being a client. A server has no real user functionality besides informing the user of the ip address and port address of the server program (which is required by the clients in order to connect to the program). the client will first have to fill in the server information and then connect. From there they have the choice of looking up a single host name, or scanning in a file full of them. Afterwards the user may choose to save the resulting host names and there ipaddresses to a txt file. 
