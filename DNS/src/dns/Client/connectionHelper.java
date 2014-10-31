@@ -150,7 +150,7 @@ public class connectionHelper extends javax.swing.JFrame {
         }
 
         if (connection == true) {
-            dns.Client.clientHub client = new dns.Client.clientHub(socket, ipAddress, jTextField2.getText());
+         //   dns.Client.clientHub client = new dns.Client.clientHub(socket, ipAddress, jTextField2.getText());
         }
     }//GEN-LAST:event_jButton1MouseClicked
 
