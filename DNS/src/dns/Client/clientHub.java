@@ -5,8 +5,17 @@
  */
 package dns.Client;
 
+import dns.Server.worker;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -14,17 +23,17 @@ import javax.swing.JOptionPane;
  * @author alfred
  */
 public class clientHub extends javax.swing.JFrame {
-
-    private Socket socket=null;
-    private String ipAddress=null;
-    private String portAddress=null;
+    
+    private Socket socket = null;
+    private String ipAddress = null;
+    private String portAddress = null;
 
     /**
      * Creates new form clientHub
      */
     public clientHub(Socket socket, String ipAddress, String portAddress) {
-        this.ipAddress=ipAddress;
-        this.portAddress=portAddress;
+        this.ipAddress = ipAddress;
+        this.portAddress = portAddress;
         this.socket = socket;
         initComponents();
         this.setVisible(true);
@@ -62,6 +71,11 @@ public class clientHub extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jButton1.setText("Search By Name");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -209,6 +223,21 @@ public class clientHub extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        try {            
+            PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
+            writer.println(jTextField1.getText());
+            writer.close();
+            
+            InputStream input = socket.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+            jTextArea1.append(reader.readLine());
+            
+        } catch (IOException ex) {
+            Logger.getLogger(clientHub.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton1MouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
