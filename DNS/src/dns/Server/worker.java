@@ -5,16 +5,13 @@
  */
 package dns.Server;
 
-import java.io.BufferedReader;
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -22,27 +19,21 @@ import java.util.logging.Logger;
  */
 public class worker {
 
-    public worker(Socket client) {
-        PrintWriter writer = null;
-        BufferedReader reader = null;
-        try {
-            InputStream input = client.getInputStream();
-            reader = new BufferedReader(new InputStreamReader(input));
-            String hostAddress = reader.readLine();
-            reader.close();
+    private DataOutputStream sendData = null;
+    private DataInputStream receiveData = null;
 
-            writer = new PrintWriter(client.getOutputStream(), true);
-            try {
-                InetAddress address = InetAddress.getByName(hostAddress);
-                writer.println(hostAddress + ": " + address.getHostAddress());
-            } catch (UnknownHostException ex) {
-                Logger.getLogger(worker.class.getName()).log(Level.SEVERE, null, ex);
-                writer.println("ERROR: Unable to resolve host, please try again.");
-            }
-            writer.close();
+    public worker(Socket client) {
+        try {
+            receiveData = new DataInputStream(new BufferedInputStream(client.getInputStream()));
+            String temp = receiveData.readUTF();
+            sendData = new DataOutputStream(client.getOutputStream());
+            InetAddress address = InetAddress.getByName(temp);
+            sendData.writeUTF(temp + ": " + address.getHostAddress());
+            sendData.flush();
 
         } catch (IOException ex) {
-            Logger.getLogger(worker.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Cause: " + ex.getCause() + "\n" + "Message: " + ex.getMessage() + "\n" + "Local Message: " + ex.getLocalizedMessage(), "Error", 0);
+            System.exit(0);
         }
     }
 }

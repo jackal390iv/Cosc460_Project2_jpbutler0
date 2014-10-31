@@ -16,10 +16,9 @@ import javax.swing.JOptionPane;
  */
 public class serverHub extends javax.swing.JFrame {
 
-    //private String hostName = null;
-    private String ipAddress;
-    private int portAddress;
-    private ServerSocket socket;
+    private String ipAddress = null;
+    private int portAddress = -1;
+    private ServerSocket server = null;
 
     /**
      * Creates new form serverHub
@@ -121,23 +120,17 @@ public class serverHub extends javax.swing.JFrame {
 
     private void build() {
         try {
-            socket = new ServerSocket(0);
-            //hostName = socket.getInetAddress().getHostName();
+            server = new ServerSocket(6052);
             ipAddress = InetAddress.getLocalHost().getHostAddress();
-            portAddress = socket.getLocalPort();
-
-            //InetAddress address = InetAddress.getByName("www.frostburg.edu");
-            //System.out.println(address.getHostAddress());
+            portAddress = server.getLocalPort();
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Cause: " + ex.getCause() + "\n" + "Message: " + ex.getMessage() + "\n" + "Local Message: " + ex.getLocalizedMessage(), "Error", 0);
             System.exit(0);
         }
-
         //System.out.println("ip: " + ipAddress + "\n" + "port: " + portAddress);
         jLabel3.setText(ipAddress);
         jLabel5.setText(Integer.valueOf(portAddress).toString());
-
-        new nameServer(socket);
+        new nameServer(server);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -22,18 +22,15 @@ public class nameServer{
     private Socket client = null;
 
     public nameServer(ServerSocket socket) {
-       
         ExecutorService executor = Executors.newCachedThreadPool();
-        
         do {
             try {
                 client = socket.accept();
             } catch (IOException ex) {
                 Logger.getLogger(worker.class.getName()).log(Level.SEVERE, null, ex);
             }
-            worker worker=new worker(client);
-            executor.submit((Runnable) worker);
-            
+            worker worker = new worker(client);
+            executor.execute((Runnable) worker);
         } while (true);
     }
 }

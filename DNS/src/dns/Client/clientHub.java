@@ -5,15 +5,11 @@
  */
 package dns.Client;
 
-import dns.Server.worker;
-import java.io.BufferedReader;
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -23,10 +19,12 @@ import javax.swing.JOptionPane;
  * @author alfred
  */
 public class clientHub extends javax.swing.JFrame {
-    
+
     private Socket socket = null;
     private String ipAddress = null;
     private int portAddress = -1;
+    private DataInputStream receiveData = null;
+    private DataOutputStream sendData = null;
 
     /**
      * Creates new form clientHub
@@ -69,6 +67,8 @@ public class clientHub extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jTextField1.setText("www.frostburg.edu");
+
         jButton1.setText("Search By Name");
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -109,6 +109,10 @@ public class clientHub extends javax.swing.JFrame {
         jLabel7.setText("Server IP-Address: ");
 
         jLabel10.setText("Server Port-Address:");
+
+        jTextField4.setText("6052");
+
+        jTextField5.setText("131.118.70.208");
 
         jButton4.setText("Connect To Server ");
         jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -175,7 +179,7 @@ public class clientHub extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
                     .addComponent(jButton4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -218,7 +222,7 @@ public class clientHub extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 574, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -233,19 +237,19 @@ public class clientHub extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        try {            
-            PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
-            writer.println(jTextField1.getText());
-            writer.close();
+        try {
+            sendData = new DataOutputStream(socket.getOutputStream());
+            sendData.writeUTF(jTextField1.getText());
+            sendData.flush();
             
-            InputStream input = socket.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-            jTextArea1.append(reader.readLine());
-            
+            receiveData = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+            String temp= receiveData.readUTF();
+            jTextArea1.append(temp);
+
         } catch (IOException ex) {
             Logger.getLogger(clientHub.class.getName()).log(Level.SEVERE, null, ex);
-             String[] jButtons = {"Try Again", "Exit"};
-           int  exit = JOptionPane.showOptionDialog(null, "Cause: " + ex.getCause() + "\n" + "Message: " + ex.getMessage() + "\n" + "Local Message: " + ex.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE, 0, null, jButtons, jButtons[1]);
+            String[] jButtons = {"Try Again", "Exit"};
+            int exit = JOptionPane.showOptionDialog(null, "Cause: " + ex.getCause() + "\n" + "Message: " + ex.getMessage() + "\n" + "Local Message: " + ex.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE, 0, null, jButtons, jButtons[1]);
             if (exit == 1) {
                 System.exit(0);
             }
@@ -253,7 +257,6 @@ public class clientHub extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
-         boolean connection = false;
         int exit = 0;
         ipAddress = jTextField5.getText();
         portAddress = Integer.parseInt(jTextField4.getText());
@@ -267,10 +270,6 @@ public class clientHub extends javax.swing.JFrame {
             }
         }
         if (socket.isConnected() == true) {
-            connection = true;
-        }
-
-        if (connection == true) {
             jLabel11.setText("Successfully Connected To Server!!");
         }
     }//GEN-LAST:event_jButton4MouseClicked
