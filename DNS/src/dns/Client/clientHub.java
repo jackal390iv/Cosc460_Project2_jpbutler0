@@ -258,7 +258,7 @@ public class clientHub extends javax.swing.JFrame {
 
             receiveData = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
             String temp = receiveData.readUTF();
-            jTextArea1.append(temp);
+            jTextArea1.append(temp+"\n");
 
         } catch (IOException ex) {
             Logger.getLogger(clientHub.class.getName()).log(Level.SEVERE, null, ex);

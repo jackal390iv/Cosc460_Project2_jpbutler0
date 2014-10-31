@@ -40,7 +40,7 @@ public class worker implements Runnable {
                     sendData.writeUTF(temp + ": " + address.getHostAddress());
                     sendData.flush();
                 } catch (IOException ex) {
-                    sendData.writeUTF("ERROR: could not resolve host, please try again.");
+                    sendData.writeUTF("ERROR: could not resolve host ("+temp+"), please try again.");
                     sendData.flush();
                 }
             } catch (IOException ex) {
